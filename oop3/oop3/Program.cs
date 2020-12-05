@@ -96,7 +96,7 @@ namespace oop3
 
                         break;
                     case 2:
-                        
+                        Console.WriteLine(eventGuestLists.Count);
                         Console.WriteLine("Unesite ime eventa kojeg ćete izbrisati:");
                         var deleteEventName = Console.ReadLine();
                         while (!doesAnEventExist(deleteEventName, eventGuestLists))
@@ -104,19 +104,21 @@ namespace oop3
                             Console.WriteLine("Ovaj event ne postoji");
                             deleteEventName = Console.ReadLine();
                         }
-                        var key=new Event("",EventType.Coffee,1,1);
-                        foreach(var e in eventGuestLists)
-                        {
-                            if (e.Key.Name.ToLower() == deleteEventName.ToLower())
-                                key = e.Key;
-
-                        }
+                        var key = getKey(deleteEventName, eventGuestLists);
                         eventGuestLists.Remove(key);
-                        
+                        Console.WriteLine(eventGuestLists.Count);
+
 
                         break;
                     case 3:
-                        
+                        Console.WriteLine("Unesite ime eventa kojeg želite urediti:");
+                        var changeEventName = Console.ReadLine();
+                        while (!doesAnEventExist(changeEventName, eventGuestLists))
+                        {
+                            Console.WriteLine("Ovaj event ne postoji");
+                            changeEventName = Console.ReadLine();
+                        }
+
                         break;
                     case 4:
                         
@@ -172,6 +174,18 @@ namespace oop3
 
             return doesItExist;
 
+
+        }
+        static Event getKey(string eventName, Dictionary<Event, List<Person>> eventGuestLists)
+        {
+            var key = new Event("", EventType.Coffee, 1, 1);
+            foreach (var e in eventGuestLists)
+            {
+                if (e.Key.Name.ToLower() == eventName.ToLower())
+                    key = e.Key;
+
+            }
+            return key;
 
         }
 
