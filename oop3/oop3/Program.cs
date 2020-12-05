@@ -96,7 +96,7 @@ namespace oop3
 
                         break;
                     case 2:
-                        Console.WriteLine(eventGuestLists.Count);
+                        
                         Console.WriteLine("Unesite ime eventa kojeg ćete izbrisati:");
                         var deleteEventName = Console.ReadLine();
                         while (!doesAnEventExist(deleteEventName, eventGuestLists))
@@ -104,9 +104,9 @@ namespace oop3
                             Console.WriteLine("Ovaj event ne postoji");
                             deleteEventName = Console.ReadLine();
                         }
-                        var key = getKey(deleteEventName, eventGuestLists);
-                        eventGuestLists.Remove(key);
-                        Console.WriteLine(eventGuestLists.Count);
+                        var deleteKey = getKey(deleteEventName, eventGuestLists);
+                        eventGuestLists.Remove(deleteKey);
+                       
 
 
                         break;
@@ -117,11 +117,49 @@ namespace oop3
                         {
                             Console.WriteLine("Ovaj event ne postoji");
                             changeEventName = Console.ReadLine();
+                            
                         }
+                        var changeKey = getKey(changeEventName, eventGuestLists);
+                      
 
                         break;
                     case 4:
                         
+                        Console.WriteLine("Unesite ime eventa na kojeg želite dodati osobu:");
+                        var addPersonEventName = Console.ReadLine();
+                        while (!doesAnEventExist(addPersonEventName, eventGuestLists))
+                        {
+                            Console.WriteLine("Ovaj event ne postoji");
+                            addPersonEventName = Console.ReadLine();
+
+                        }
+                        var addKey = getKey(addPersonEventName, eventGuestLists);
+                        Console.WriteLine("Unesite OIB osobe");
+                        var oib = 0;
+                        var doesOibExist = true;
+                        while(doesOibExist)
+                        {
+                            oib = IntegerInput();
+                            doesOibExist = false;
+                        foreach(var person in eventGuestLists[addKey])
+                        
+                                if (person.OIB == oib)
+                                {
+                                    doesOibExist = true;
+                                        Console.WriteLine("Osoba s ovim OIB-om vec postoji");
+                                }
+                        
+                        }
+                        Console.WriteLine("Unesite ime osobe");
+                        var newFirstName = Console.ReadLine();
+                        Console.WriteLine("Unesite prezime osobe");
+                        var newLastName = Console.ReadLine();
+                        Console.WriteLine("Unesite broj mobitela osobe");
+                        var newPhoneNumber = IntegerInput();
+                        Console.WriteLine(eventGuestLists[addKey].Count);
+                        eventGuestLists[addKey].Add(new Person(newFirstName, newLastName, oib, newPhoneNumber));
+                        Console.WriteLine(eventGuestLists[addKey].Count);
+
                         break;
                     case 5:
                         
