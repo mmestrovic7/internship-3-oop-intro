@@ -271,6 +271,21 @@ namespace oop3
 
             }
             var changeKey = GetKey(changeEventName, eventGuestLists);
+            var value = eventGuestLists[changeKey];
+            eventGuestLists.Remove(changeKey);
+            AddEvent(eventGuestLists);
+            var i = 1;
+            var key = new Event("", EventType.Coffee, 1, 1);
+            foreach (var e in eventGuestLists)
+            {
+                if (i==eventGuestLists.Count)
+                    key = e.Key;
+                i++;
+
+            }
+            eventGuestLists[key] = value;
+
+
 
         }
         static bool PrintAndExit(Dictionary<Event, List<Person>> eventGuestLists)
