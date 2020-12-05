@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 namespace oop3
 {
@@ -53,73 +54,21 @@ namespace oop3
                 switch (parsedOption)
                 {
                     case 1:
-                        
-                        Console.WriteLine("Unesite ime novog eventa:");
-
-                        var newEventName = Console.ReadLine();
-                        while(doesAnEventExist(newEventName,eventGuestLists))
-                        {
-                            Console.WriteLine("Već postoji ovaj event unesite neko drugo ime.");
-                            newEventName = Console.ReadLine();
-                        }
-
-                        var newType = -1;
-                        while(newType<0||newType>4)
-                        { 
-                        Console.WriteLine("Koji je tip novog eventa, unesite broj od 0 do 3? 0=Kava, 1=Predavanje, 2=Koncert, 3=Učenje");
-                        while(newType==-1)
-                        newType = IntegerInput();
-                            if (newType < 0 || newType > 3)
-                                newType = -1;
-                        }
-
-                        Console.WriteLine("Unesite kada će event započeti:");
-                        var newStartTime = IntegerInput();
-                        while(isTimeTaken(newStartTime,eventGuestLists))
-                            {
-                            Console.WriteLine("Vrijeme je već zauzeto");
-                            newStartTime = IntegerInput();
-
-                        }
-                        Console.WriteLine("Unesite kada će event završiti:");
-                        var newEndTime = IntegerInput();
-                        while (isTimeTaken(newEndTime, eventGuestLists)==true||newEndTime<newStartTime)
-                        {
-                            Console.WriteLine("Broj mora biti veći od prvog i ne smije biti zauzet");
-                            newEndTime = IntegerInput();
-
-                        }
-                        eventGuestLists.Add(new Event(newEventName, (EventType)newType, newStartTime, newEndTime), new List<Person> { });
-
-                      
-
-
+                        AddEvent(eventGuestLists);
                         break;
                     case 2:
-                        
-                        Console.WriteLine("Unesite ime eventa kojeg ćete izbrisati:");
-                        var deleteEventName = Console.ReadLine();
-                        while (!doesAnEventExist(deleteEventName, eventGuestLists))
-                        {
-                            Console.WriteLine("Ovaj event ne postoji");
-                            deleteEventName = Console.ReadLine();
-                        }
-                        var deleteKey = getKey(deleteEventName, eventGuestLists);
-                        eventGuestLists.Remove(deleteKey);
-                       
-
-
+                        DeleteEvent(eventGuestLists);
                         break;
                     case 3:
                         Console.WriteLine("Unesite ime eventa kojeg želite urediti:");
                         var changeEventName = Console.ReadLine();
-                        while (!doesAnEventExist(changeEventName, eventGuestLists))
+                        while (!DoesAnEventExist(changeEventName, eventGuestLists))
                         {
                             Console.WriteLine("Ovaj event ne postoji");
                             changeEventName = Console.ReadLine();
                             
                         }
-                        var changeKey = getKey(changeEventName, eventGuestLists);
+                        var changeKey = GetKey(changeEventName, eventGuestLists);
                       
 
                         break;
@@ -127,13 +76,13 @@ namespace oop3
                         
                         Console.WriteLine("Unesite ime eventa na kojeg želite dodati osobu:");
                         var addPersonEventName = Console.ReadLine();
-                        while (!doesAnEventExist(addPersonEventName, eventGuestLists))
+                        while (!DoesAnEventExist(addPersonEventName, eventGuestLists))
                         {
                             Console.WriteLine("Ovaj event ne postoji");
                             addPersonEventName = Console.ReadLine();
 
                         }
-                        var addKey = getKey(addPersonEventName, eventGuestLists);
+                        var addKey = GetKey(addPersonEventName, eventGuestLists);
                         Console.WriteLine("Unesite OIB osobe");
                         var oib = 0;
                         var doesOibExist = true;
@@ -156,13 +105,18 @@ namespace oop3
                         var newLastName = Console.ReadLine();
                         Console.WriteLine("Unesite broj mobitela osobe");
                         var newPhoneNumber = IntegerInput();
-                        Console.WriteLine(eventGuestLists[addKey].Count);
                         eventGuestLists[addKey].Add(new Person(newFirstName, newLastName, oib, newPhoneNumber));
-                        Console.WriteLine(eventGuestLists[addKey].Count);
-
                         break;
                     case 5:
-                        
+
+                        Console.WriteLine("Unesite ime eventa sa kojeg želite ukloniti osobu:");
+                        var removePersonEventName = Console.ReadLine();
+                        while (!DoesAnEventExist(removePersonEventName, eventGuestLists))
+                        {
+                            Console.WriteLine("Ovaj event ne postoji");
+                            removePersonEventName = Console.ReadLine();
+
+                        }
                         break;
                     case 6:
                         
@@ -187,7 +141,7 @@ namespace oop3
             }
             return parsedNumber;
         }
-        static bool doesAnEventExist(string newEventName, Dictionary<Event, List<Person>> eventGuestLists)
+        static bool DoesAnEventExist(string newEventName, Dictionary<Event, List<Person>> eventGuestLists)
         {
             var doesItExist = false;
 
@@ -200,7 +154,7 @@ namespace oop3
             return doesItExist;
 
         }
-        static bool isTimeTaken(int number, Dictionary<Event, List<Person>> eventGuestLists)
+        static bool IsTimeTaken(int number, Dictionary<Event, List<Person>> eventGuestLists)
         {
             var doesItExist = false;
 
@@ -214,7 +168,7 @@ namespace oop3
 
 
         }
-        static Event getKey(string eventName, Dictionary<Event, List<Person>> eventGuestLists)
+        static Event GetKey(string eventName, Dictionary<Event, List<Person>> eventGuestLists)
         {
             var key = new Event("", EventType.Coffee, 1, 1);
             foreach (var e in eventGuestLists)
@@ -226,7 +180,61 @@ namespace oop3
             return key;
 
         }
+        static void AddEvent(Dictionary<Event, List<Person>> eventGuestLists)
+        {
+            Console.WriteLine("Unesite ime novog eventa:");
 
+            var newEventName = Console.ReadLine();
+            while (DoesAnEventExist(newEventName, eventGuestLists))
+            {
+                Console.WriteLine("Već postoji ovaj event unesite neko drugo ime.");
+                newEventName = Console.ReadLine();
+            }
+
+            var newType = -1;
+            while (newType < 0 || newType > 4)
+            {
+                Console.WriteLine("Koji je tip novog eventa, unesite broj od 0 do 3? 0=Kava, 1=Predavanje, 2=Koncert, 3=Učenje");
+                while (newType == -1)
+                    newType = IntegerInput();
+                if (newType < 0 || newType > 3)
+                    newType = -1;
+            }
+
+            Console.WriteLine("Unesite kada će event započeti:");
+            var newStartTime = IntegerInput();
+            while (IsTimeTaken(newStartTime, eventGuestLists))
+            {
+                Console.WriteLine("Vrijeme je već zauzeto");
+                newStartTime = IntegerInput();
+
+            }
+            Console.WriteLine("Unesite kada će event završiti:");
+            var newEndTime = IntegerInput();
+            while (IsTimeTaken(newEndTime, eventGuestLists) == true || newEndTime < newStartTime)
+            {
+                Console.WriteLine("Broj mora biti veći od prvog i ne smije biti zauzet");
+                newEndTime = IntegerInput();
+
+            }
+            eventGuestLists.Add(new Event(newEventName, (EventType)newType, newStartTime, newEndTime), new List<Person> { });
+
+
+        }
+        static void DeleteEvent(Dictionary<Event, List<Person>> eventGuestLists)
+        {
+
+            Console.WriteLine("Unesite ime eventa kojeg ćete izbrisati:");
+            var deleteEventName = Console.ReadLine();
+            while (!DoesAnEventExist(deleteEventName, eventGuestLists))
+            {
+                Console.WriteLine("Ovaj event ne postoji");
+                deleteEventName = Console.ReadLine();
+            }
+            var deleteKey = GetKey(deleteEventName, eventGuestLists);
+            eventGuestLists.Remove(deleteKey);
+
+        }
 
 
 
