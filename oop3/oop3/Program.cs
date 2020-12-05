@@ -287,11 +287,36 @@ namespace oop3
                 switch(parsedOption)
                 {
                     case 1:
+                        foreach(var e in eventGuestLists)
+                        {
+                            Console.WriteLine(e.Key.Name +" - "+ e.Key.EventType+" - "+e.Key.StartTime+" - "+e.Key.EndTime+" - "+(e.Key.EndTime-e.Key.StartTime)+" - "+e.Value.Count);
+                        }
                         break;
                     case 2:
-                        
+                        var i = 1;
+                        foreach (var e in eventGuestLists)
+                        { i = 1;
+                        foreach(var person in e.Value)
+                            {
+                                Console.WriteLine("[" + i + "]. "+person.FirstName+" - "+person.LastName+" - "+person.PhoneNumber);
+                                i++;
+                        }
+                        }
+
                         break;
                     case 3:
+                        foreach (var e in eventGuestLists)
+                        {
+
+                            Console.WriteLine(e.Key.Name + " - " + e.Key.EventType + " - " + e.Key.StartTime + " - " + e.Key.EndTime + " - " + (e.Key.EndTime - e.Key.StartTime) + " - " + e.Value.Count);
+                            i = 1;
+                            foreach (var person in e.Value)
+                            {
+                                Console.WriteLine("[" + i + "]. " + person.FirstName + " - " + person.LastName + " - " + person.PhoneNumber);
+                                i++;
+                            }
+                        }
+
                         break;
                     case 4:
                         rightInput = true;
