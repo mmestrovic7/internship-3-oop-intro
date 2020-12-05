@@ -4,7 +4,7 @@ using System.Text;
 
 namespace oop3
 {
-    class Event
+    public class Event
     {
     }
 }
