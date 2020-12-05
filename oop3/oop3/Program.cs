@@ -60,63 +60,13 @@ namespace oop3
                         DeleteEvent(eventGuestLists);
                         break;
                     case 3:
-                        Console.WriteLine("Unesite ime eventa kojeg želite urediti:");
-                        var changeEventName = Console.ReadLine();
-                        while (!DoesAnEventExist(changeEventName, eventGuestLists))
-                        {
-                            Console.WriteLine("Ovaj event ne postoji");
-                            changeEventName = Console.ReadLine();
-                            
-                        }
-                        var changeKey = GetKey(changeEventName, eventGuestLists);
-                      
-
+                        EditEvent(eventGuestLists);
                         break;
                     case 4:
-                        
-                        Console.WriteLine("Unesite ime eventa na kojeg želite dodati osobu:");
-                        var addPersonEventName = Console.ReadLine();
-                        while (!DoesAnEventExist(addPersonEventName, eventGuestLists))
-                        {
-                            Console.WriteLine("Ovaj event ne postoji");
-                            addPersonEventName = Console.ReadLine();
-
-                        }
-                        var addKey = GetKey(addPersonEventName, eventGuestLists);
-                        Console.WriteLine("Unesite OIB osobe");
-                        var oib = 0;
-                        var doesOibExist = true;
-                        while(doesOibExist)
-                        {
-                            oib = IntegerInput();
-                            doesOibExist = false;
-                        foreach(var person in eventGuestLists[addKey])
-                        
-                                if (person.OIB == oib)
-                                {
-                                    doesOibExist = true;
-                                        Console.WriteLine("Osoba s ovim OIB-om vec postoji");
-                                }
-                        
-                        }
-                        Console.WriteLine("Unesite ime osobe");
-                        var newFirstName = Console.ReadLine();
-                        Console.WriteLine("Unesite prezime osobe");
-                        var newLastName = Console.ReadLine();
-                        Console.WriteLine("Unesite broj mobitela osobe");
-                        var newPhoneNumber = IntegerInput();
-                        eventGuestLists[addKey].Add(new Person(newFirstName, newLastName, oib, newPhoneNumber));
+                        AddPersonToEvent(eventGuestLists);
                         break;
                     case 5:
-
-                        Console.WriteLine("Unesite ime eventa sa kojeg želite ukloniti osobu:");
-                        var removePersonEventName = Console.ReadLine();
-                        while (!DoesAnEventExist(removePersonEventName, eventGuestLists))
-                        {
-                            Console.WriteLine("Ovaj event ne postoji");
-                            removePersonEventName = Console.ReadLine();
-
-                        }
+                        DeletePersonFromEvent(eventGuestLists);
                         break;
                     case 6:
                         
@@ -233,6 +183,94 @@ namespace oop3
             }
             var deleteKey = GetKey(deleteEventName, eventGuestLists);
             eventGuestLists.Remove(deleteKey);
+
+        }
+        static void AddPersonToEvent(Dictionary<Event, List<Person>> eventGuestLists)
+        {
+
+            Console.WriteLine("Unesite ime eventa na kojeg želite dodati osobu:");
+            var addPersonEventName = Console.ReadLine();
+            while (!DoesAnEventExist(addPersonEventName, eventGuestLists))
+            {
+                Console.WriteLine("Ovaj event ne postoji");
+                addPersonEventName = Console.ReadLine();
+
+            }
+            var addKey = GetKey(addPersonEventName, eventGuestLists);
+            Console.WriteLine("Unesite OIB osobe");
+            var oib = 0;
+            var doesOibExist = true;
+            while (doesOibExist)
+            {
+                oib = IntegerInput();
+                doesOibExist = false;
+                foreach (var person in eventGuestLists[addKey])
+
+                    if (person.OIB == oib)
+                    {
+                        doesOibExist = true;
+                        Console.WriteLine("Osoba s ovim OIB-om vec postoji");
+                    }
+
+            }
+            Console.WriteLine("Unesite ime osobe");
+            var newFirstName = Console.ReadLine();
+            Console.WriteLine("Unesite prezime osobe");
+            var newLastName = Console.ReadLine();
+            Console.WriteLine("Unesite broj mobitela osobe");
+            var newPhoneNumber = IntegerInput();
+            eventGuestLists[addKey].Add(new Person(newFirstName, newLastName, oib, newPhoneNumber));
+
+        }
+        static void DeletePersonFromEvent(Dictionary<Event, List<Person>> eventGuestLists)
+        {
+            Console.WriteLine("Unesite ime eventa sa kojeg želite ukloniti osobu:");
+            var removePersonEventName = Console.ReadLine();
+            while (!DoesAnEventExist(removePersonEventName, eventGuestLists))
+            {
+                Console.WriteLine("Ovaj event ne postoji");
+                removePersonEventName = Console.ReadLine();
+
+            }
+            var removeKey = GetKey(removePersonEventName, eventGuestLists);
+            
+            var deletePersonName = "";
+            var doesNameExist = false;
+            var position = 0;
+            while (!doesNameExist)
+            {
+                Console.WriteLine("Unesite ime osobe koju želite ukloniti:");
+                deletePersonName = Console.ReadLine();
+                var i= 0;
+
+                foreach (var person in eventGuestLists[removeKey])
+                {
+                    if (person.FirstName.ToLower() == deletePersonName.ToLower())
+
+                    {
+                        doesNameExist = true;
+                        position = i;
+                    }
+
+                    i++;
+                }
+            }
+            Console.WriteLine(eventGuestLists[removeKey].Count);
+            eventGuestLists[removeKey].RemoveAt(position);
+            Console.WriteLine(eventGuestLists[removeKey].Count);
+
+        }
+        static void EditEvent(Dictionary<Event,List<Person>> eventGuestLists)
+        {
+            Console.WriteLine("Unesite ime eventa kojeg želite urediti:");
+            var changeEventName = Console.ReadLine();
+            while (!DoesAnEventExist(changeEventName, eventGuestLists))
+            {
+                Console.WriteLine("Ovaj event ne postoji");
+                changeEventName = Console.ReadLine();
+
+            }
+            var changeKey = GetKey(changeEventName, eventGuestLists);
 
         }
 
