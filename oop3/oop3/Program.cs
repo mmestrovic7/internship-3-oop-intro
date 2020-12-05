@@ -69,7 +69,7 @@ namespace oop3
                         DeletePersonFromEvent(eventGuestLists);
                         break;
                     case 6:
-                        
+                        rightInput=PrintAndExit(eventGuestLists);
                         break;
                     default:
                         Console.WriteLine("Morate unijeti broj od 1 do 6");
@@ -255,9 +255,9 @@ namespace oop3
                     i++;
                 }
             }
-            Console.WriteLine(eventGuestLists[removeKey].Count);
+            
             eventGuestLists[removeKey].RemoveAt(position);
-            Console.WriteLine(eventGuestLists[removeKey].Count);
+            
 
         }
         static void EditEvent(Dictionary<Event,List<Person>> eventGuestLists)
@@ -272,6 +272,38 @@ namespace oop3
             }
             var changeKey = GetKey(changeEventName, eventGuestLists);
 
+        }
+        static bool PrintAndExit(Dictionary<Event, List<Person>> eventGuestLists)
+        {
+            Console.WriteLine("1.Ispis detalja eventa u formatu: name – event type – start time – end time – trajanje – ispis broja ljudi na eventu");
+            Console.WriteLine("2.Ispis svih osoba na eventu u formatu: [Redni broj u listi]. name – last name – broj mobitela");
+            Console.WriteLine("3.Ispis svih detalja. Kombinacija ispisa detalja eventa ( 6.1.) i ispisa svih osoba( 6.2.)");
+            Console.WriteLine("4.Izlazak iz podmenija.");
+            bool rightInput = false;
+            while (!rightInput)
+            {
+                Console.WriteLine("Na podmeniju ste. Izaberite što želite:");
+                var parsedOption = IntegerInput();
+                switch(parsedOption)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        rightInput = true;
+                      
+                        break;
+                    default:
+                        Console.WriteLine("Morate unijeti broj od 1 do 4");
+                        break;
+                }
+                
+            }
+            return rightInput;
         }
 
 
