@@ -33,60 +33,133 @@ namespace oop3
                 {exampleEvent3,exampleGuestList3 },
 
             };
-            
+
             Console.WriteLine("1.Dodavanje eventa");
             Console.WriteLine("2.Brisanje eventa");
             Console.WriteLine("3.Edit eventa");
             Console.WriteLine("4.Dodavanje osobe na event");
             Console.WriteLine("5.Uklanjanje osobe sa eventa");
             Console.WriteLine("6.Ispis detalja eventa.");
-            Console.WriteLine("Izaberite što želite:");
             
+            
+           
+          
             bool rightInput = false;
             while (!rightInput)
             {
-                bool isItANumber = false;
-                int parsedOption = 0;
-                while (!isItANumber)
-                {
-                    var option = Console.ReadLine();
-                    isItANumber = int.TryParse(option, out parsedOption);
-                    if (!isItANumber)
-                        Console.WriteLine("Morate unijeti broj");
+                Console.WriteLine("Na početnom ste izborniku. Izaberite što želite:");
+                var parsedOption = IntegerInput();
 
-                }
                 switch (parsedOption)
                 {
                     case 1:
-                        rightInput = true;
+                        Console.WriteLine(eventGuestLists.Count);
+                        Console.WriteLine("Unesite ime novog eventa:");
+
+                        var newEventName = Console.ReadLine();
+                        while(doesAnEventExist(newEventName,eventGuestLists))
+                        {
+                            Console.WriteLine("Već postoji ovaj event unesite neko drugo ime.");
+                            newEventName = Console.ReadLine();
+                        }
+
+                        var newType = -1;
+                        while(newType<0||newType>4)
+                        { 
+                        Console.WriteLine("Koji je tip novog eventa, unesite broj od 0 do 3? 0=Kava, 1=Predavanje, 2=Koncert, 3=Učenje");
+                        while(newType==-1)
+                        newType = IntegerInput();
+                            if (newType < 0 || newType > 3)
+                                newType = -1;
+                        }
+
+                        Console.WriteLine("Unesite kada će event započeti:");
+                        var newStartTime = IntegerInput();
+                        while(isTimeTaken(newStartTime,eventGuestLists))
+                            {
+                            Console.WriteLine("Vrijeme je već zauzeto");
+                            newStartTime = IntegerInput();
+
+                        }
+                        Console.WriteLine("Unesite kada će event završiti:");
+                        var newEndTime = IntegerInput();
+                        while (isTimeTaken(newEndTime, eventGuestLists)==true||newEndTime<newStartTime)
+                        {
+                            Console.WriteLine("Broj mora biti veći od prvog i ne smije biti zauzet");
+                            newEndTime = IntegerInput();
+
+                        }
+                        eventGuestLists.Add(new Event(newEventName, (EventType)newType, newStartTime, newEndTime), new List<Person> { });
+
+                        Console.WriteLine(eventGuestLists.Count);
+
+
                         break;
                     case 2:
-                        rightInput = true;
+                        
                         break;
                     case 3:
-                        rightInput = true;
+                        
                         break;
                     case 4:
-                        rightInput = true;
+                        
                         break;
                     case 5:
-                        rightInput = true;
+                        
                         break;
                     case 6:
-                        rightInput = true;
+                        
                         break;
                     default:
                         Console.WriteLine("Morate unijeti broj od 1 do 6");
                         break;
                 }
             }
+        }
+        static int IntegerInput()
+        {
+            bool isItANumber = false;
+            int parsedNumber = -1;
+            while (!isItANumber)
+            {
+                var number = Console.ReadLine();
+                isItANumber = int.TryParse(number, out parsedNumber);
+                if (!isItANumber)
+                    Console.WriteLine("Morate unijeti broj");
+
+            }
+            return parsedNumber;
+        }
+        static bool doesAnEventExist(string newEventName, Dictionary<Event, List<Person>> eventGuestLists)
+        {
+            var doesItExist = false;
+
+                foreach (var e in eventGuestLists)
+                    if (newEventName.ToLower() == e.Key.Name.ToLower())
+                    doesItExist = true;
+
+                    
+          
+            return doesItExist;
+
+        }
+        static bool isTimeTaken(int number, Dictionary<Event, List<Person>> eventGuestLists)
+        {
+            var doesItExist = false;
+
+            foreach (var e in eventGuestLists)
+                if (number >= e.Key.StartTime && number <= e.Key.EndTime)
+                   doesItExist=true ;
 
 
-            
 
+            return doesItExist;
 
 
         }
-       
+
+
+
+
     }
 }
