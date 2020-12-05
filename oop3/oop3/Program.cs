@@ -53,7 +53,7 @@ namespace oop3
                 switch (parsedOption)
                 {
                     case 1:
-                        Console.WriteLine(eventGuestLists.Count);
+                        
                         Console.WriteLine("Unesite ime novog eventa:");
 
                         var newEventName = Console.ReadLine();
@@ -91,12 +91,29 @@ namespace oop3
                         }
                         eventGuestLists.Add(new Event(newEventName, (EventType)newType, newStartTime, newEndTime), new List<Person> { });
 
-                        Console.WriteLine(eventGuestLists.Count);
+                      
 
 
                         break;
                     case 2:
                         
+                        Console.WriteLine("Unesite ime eventa kojeg ćete izbrisati:");
+                        var deleteEventName = Console.ReadLine();
+                        while (!doesAnEventExist(deleteEventName, eventGuestLists))
+                        {
+                            Console.WriteLine("Ovaj event ne postoji");
+                            deleteEventName = Console.ReadLine();
+                        }
+                        var key=new Event("",EventType.Coffee,1,1);
+                        foreach(var e in eventGuestLists)
+                        {
+                            if (e.Key.Name.ToLower() == deleteEventName.ToLower())
+                                key = e.Key;
+
+                        }
+                        eventGuestLists.Remove(key);
+                        
+
                         break;
                     case 3:
                         
