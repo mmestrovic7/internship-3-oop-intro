@@ -44,12 +44,17 @@ namespace oop3
             
             
            
-          
+            var option6 = false;
             bool rightInput = false;
             while (!rightInput)
             {
-                Console.WriteLine("Na početnom ste izborniku. Izaberite što želite:");
+                
+                if (option6)
+                    Console.WriteLine("Na početnom ste izborniku. Izaberite što želite, broj 6 je sada prekid rada");
+                else
+                    Console.WriteLine("Na početnom ste izborniku. Izaberite što želite:");
                 var parsedOption = IntegerInput();
+                
 
                 switch (parsedOption)
                 {
@@ -69,7 +74,10 @@ namespace oop3
                         DeletePersonFromEvent(eventGuestLists);
                         break;
                     case 6:
-                        rightInput=PrintAndExit(eventGuestLists);
+                        if (option6)
+                            rightInput = true;   
+                        else
+                        option6=PrintAndExit(eventGuestLists);
                         break;
                     default:
                         Console.WriteLine("Morate unijeti broj od 1 do 6");
@@ -130,7 +138,7 @@ namespace oop3
             return key;
 
         }
-        static void AddEvent(Dictionary<Event, List<Person>> eventGuestLists)
+        static string AddEvent(Dictionary<Event, List<Person>> eventGuestLists)
         {
             Console.WriteLine("Unesite ime novog eventa:");
 
@@ -168,6 +176,7 @@ namespace oop3
 
             }
             eventGuestLists.Add(new Event(newEventName, (EventType)newType, newStartTime, newEndTime), new List<Person> { });
+            return newEventName;
 
 
         }
@@ -273,17 +282,10 @@ namespace oop3
             var changeKey = GetKey(changeEventName, eventGuestLists);
             var value = eventGuestLists[changeKey];
             eventGuestLists.Remove(changeKey);
-            AddEvent(eventGuestLists);
-            var i = 1;
-            var key = new Event("", EventType.Coffee, 1, 1);
-            foreach (var e in eventGuestLists)
-            {
-                if (i==eventGuestLists.Count)
-                    key = e.Key;
-                i++;
-
-            }
-            eventGuestLists[key] = value;
+            var newName=AddEvent(eventGuestLists);
+            var newKey = GetKey(newName, eventGuestLists);
+        
+            eventGuestLists[newKey] = value;
 
 
 
